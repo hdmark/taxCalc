@@ -1,9 +1,23 @@
-# Mgmt
-First whack at a management site
+# Tax Calc 
+First go at a crypto tax calc/portfolio site
+
+current features:
+
+user auth
+
+basic input/output from database
+
 
 todo's:
-add contact info
-add tenant login
-submit/track work orders
-payment?
-new listings
+
+flush output
+
+update DB to take summary data
+
+add input sections for more transactions
+
+add api inputs?
+
+add json output
+
+add excel or pdf outputs
