@@ -2,12 +2,14 @@ module.exports = function(app,passport,connection){
     //Add in queries
     var queries = require('../queries/indexQueries')(connection);
 
-
-
     //Home page
     app.get("/", function(req, res){
         res.render("index");
     });
+
+    // =========================================================================
+    // AUTH SETUP ==============================================================
+    // =========================================================================
 
     //==========LOGIN==========
     //show login form
@@ -26,7 +28,7 @@ module.exports = function(app,passport,connection){
         }), 
         function(req, res){
             if (req.body.remember){
-                req.session.cookie.maxAge = 1000*60*3;
+                req.session.cookie.maxAge = 1000*60*10; //10 minute timeout
             } else {
                 req.session.cookie.expires = false;
             }
@@ -58,7 +60,10 @@ module.exports = function(app,passport,connection){
     });
 
 
-    //==========INTERNALS==========
+    // =========================================================================
+    // INTERNAL PAGES===========================================================
+    // =========================================================================
+
     //dashboard page for future
     app.get('/dashboard', isLoggedIn, function(req, res) {
 
@@ -80,6 +85,7 @@ module.exports = function(app,passport,connection){
            
     });
 
+    //dtailed view post - add transaction
     app.post('/detail', isLoggedIn, function(req, res){
         var trans = {
             user_id: req.user.id,

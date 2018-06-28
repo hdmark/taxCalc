@@ -3,13 +3,12 @@ var express 		= require("express"),
 	port 			= process.env.PORT || 3000,
 	cookieParser	= require("cookie-parser"),
 	bodyParser 		= require("body-parser"),
-    passport    	= require("passport"),
-    methodOverride 	= require("method-override"),
+	passport    	= require("passport"),
+	methodOverride 	= require("method-override"),
 	connection		= require("./config/database"),
-    morgan 			= require("morgan"),
-    session 		= require("express-session"),
-
-    flash 			= require("connect-flash");
+	morgan 			= require("morgan"),
+	session 		= require("express-session"),
+	flash 			= require("connect-flash");
 
 
 //====================App Config====================//
@@ -53,6 +52,6 @@ require('./config/passport')(passport,  connection)
 
 //====================Server====================//
 app.listen(port, function(){
-	console.log("Here we go on port 3000");
+	console.log("Here we go on port " + port);
 });
 
