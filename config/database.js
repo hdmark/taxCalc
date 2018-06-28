@@ -1,7 +1,8 @@
 // config/database.js
 var mysql = require('mysql');
 
-var connection = mysql.createConnection({
+var connection = mysql.createPool({
+	connectionLimit: 10,
    	host:       'localhost',
     user:       'root',
     password: 	'pass',
@@ -9,8 +10,10 @@ var connection = mysql.createConnection({
 
 });
 
-connection.connect(function(err){
-	if(err) throw err;
-});
+connection.query('SELECT 1 + 1 AS solution', function(err, results){
+	if(err){console.log('Pool Failed')};
+	console.log('Pool Is Running');
+})
 
 module.exports = connection;
+

@@ -4,12 +4,11 @@ var express 		= require("express"),
 	cookieParser	= require("cookie-parser"),
 	bodyParser 		= require("body-parser"),
     passport    	= require("passport"),
-    LocalStrategy	= require("passport-local").Strategy,
     methodOverride 	= require("method-override"),
-	mysql 			= require("mysql"),
-	db				= require("./config/database"),
+	connection		= require("./config/database"),
     morgan 			= require("morgan"),
     session 		= require("express-session"),
+
     flash 			= require("connect-flash");
 
 
@@ -43,11 +42,13 @@ app.use(function(req, res, next){
 
 
 //====================Final setup====================//
+
 //Add in the Routes code
-require("./routes/index.js")(app, passport, db);
+require("./routes/index.js")(app, passport, connection);
 
 //Add in the passport code
-require('./config/passport')(passport, LocalStrategy, db)
+require('./config/passport')(passport,  connection)
+
 
 
 //====================Server====================//

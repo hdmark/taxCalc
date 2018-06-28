@@ -1,4 +1,8 @@
-module.exports = function(app,passport,db){
+module.exports = function(app,passport,connection){
+    //Add in queries
+    var queries = require('../queries/indexQueries')(connection);
+
+
 
     //Home page
     app.get("/", function(req, res){
@@ -57,34 +61,21 @@ module.exports = function(app,passport,db){
     //==========INTERNALS==========
     //dashboard page for future
     app.get('/dashboard', isLoggedIn, function(req, res) {
-        console.log(req.user.username);
-        var q = `SELECT * FROM holdings 
-                 JOIN users ON holdings.user_id=users.id 
-                 JOIN coins ON holdings.coin_id=coins.id
-                 WHERE username=?`
-        var query = db.query(q,[req.user.username], function(err, results){
+
+        queries.dashboard(req.user.username, function(err,results){
             if(err){
-                console.log("failed finding users");
+                console.log(err);
             }
-            //console.log(results)
-            res.render('dashboard.ejs', {results:results});
+            res.render('dashboard.ejs', {results:results})
         })
-           
     });
 
     //detailed view page for future
     app.get('/detail', isLoggedIn, function(req, res) {
 
-        console.log(req.user.username);
-        var q = `SELECT * FROM trans 
-                 JOIN users ON trans.user_id=users.id 
-                 WHERE username=?`
-        var query = db.query(q,[req.user.username], function(err, results){
-            if(err){
-                console.log("failed finding users");
-            }
-            //console.log(results)
-            res.render('detail', {results:results});
+        queries.detail(req.user.username, function(err,results){
+            if(err){console.log(err)};
+            res.render('detail', {results:results})
         })
            
     });
@@ -99,15 +90,10 @@ module.exports = function(app,passport,db){
             transType_id: req.body.transType
         }
 
-        var q = `INSERT INTO trans SET ?`
-        var query = db.query(q, trans, function(error, results){
-            if(error) {
-                console.log("Bad Input Data");
-            }
-            console.log(results);
+        queries.detailInsert(trans, function(err,results){
+            if(err){console.log(err)};
             res.redirect('detail')
-        })
-        
+        })        
     })
 
 

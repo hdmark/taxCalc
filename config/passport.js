@@ -1,10 +1,11 @@
 // config/passport.js
 
-// load up the user model
+// load up the required junk
 var bcrypt = require('bcrypt-nodejs');
+var LocalStrategy   = require("passport-local").Strategy
 
 // expose this function to our app using module.exports
-module.exports = function(passport, LocalStrategy, connection) {
+module.exports = function(passport,  connection) {
 
     // =========================================================================
     // passport session setup ==================================================
