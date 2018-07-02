@@ -33,7 +33,15 @@
 									<% }) %>
 								<% } %>
 								<tr>
-									<td><input type="number" name="coinIn"></td>
+									<td>
+										<input type="text" list="cars" name="coinIn"/>
+										<datalist id="cars">
+										  <option>Rave</option>
+										  <option>1</option>
+										  <option>2</option>
+										  <option>3</option>
+										</datalist>
+									</td>
 									<td><input type="number" name="amountIn"></td>
 									<td><input type="number" name="coinOut"></td>
 									<td><input type="number" name="amountOut"></td>

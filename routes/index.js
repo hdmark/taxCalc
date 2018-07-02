@@ -32,6 +32,7 @@ module.exports = function(app,passport,connection){
             } else {
                 req.session.cookie.expires = false;
             }
+            //req.flash('error', "hi")
             res.render("/dashboard");
     });
 
@@ -55,7 +56,6 @@ module.exports = function(app,passport,connection){
     //logout
     app.get("/logout", function(req, res){
         req.logout();
-        req.flash("success", "Logged out successfully");
         res.redirect("/");
     });
 
@@ -67,10 +67,11 @@ module.exports = function(app,passport,connection){
     //dashboard page for future
     app.get('/dashboard', isLoggedIn, function(req, res) {
 
-        queries.dashboard(req.user.username, function(err,results){
+        queries.dashboard(req.user.id, function(err,results){
             if(err){
                 console.log(err);
             }
+            console.log(results)
             res.render('dashboard.ejs', {results:results})
         })
     });
@@ -97,7 +98,12 @@ module.exports = function(app,passport,connection){
         }
 
         queries.detailInsert(trans, function(err,results){
-            if(err){console.log(err)};
+            if(err){
+                //console.log(err)
+                req.flash('error', 'Invalid Data')
+                res.render('detail')
+            };
+            
             res.redirect('detail')
         })        
     })
