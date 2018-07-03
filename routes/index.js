@@ -71,7 +71,6 @@ module.exports = function(app,passport,connection){
             if(err){
                 console.log(err);
             }
-
             res.render('dashboard.ejs', {results:results})
         })
     });
@@ -81,7 +80,6 @@ module.exports = function(app,passport,connection){
 
         queries.detail(req.user.username, function(err,results){
             if(err){console.log(err)};
-            console.log(results)
             res.render('detail', {results:results})
         })
            
@@ -138,7 +136,6 @@ module.exports = function(app,passport,connection){
                     req.flash('error', 'failed to get trains type')
                     res.render('detail')
                 }
-                console.log(results)
                 transTypeList = results
                 res.render('addTrans', {coinsList:coinsList, transTypeList:transTypeList})
             })

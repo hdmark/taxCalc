@@ -3,39 +3,36 @@ module.exports = function(connection){
 
 	//Dashboard code pulls out user holdings as of now
 	module.dashboard = function(userId, next){
-		//table
-		// flow | short_name | amt
-		// 'in' | BTC        | 100
-		var q = `SELECT 
-				'in' as flow, short_name, sum(amountIn) as amt
-				FROM coins
-				JOIN trans t ON t.coinIn_id=coins.id
-				WHERE user_id = ?
-				GROUP BY short_name
-				UNION
-				SELECT
-				'out' as flow, short_name, sum(amountOut) as amt
-				FROM coins
-				JOIN trans t ON t.coinOut_id=coins.id
-				WHERE user_id = ?
-				GROUP BY short_name
-				`
+
+		var q = `select 
+					short_name,
+					ifnull(plus, 0) - ifnull(minus,0) as balance
+				from coins
+				left join
+					(
+						select
+							coinOut_id,
+							sum(amountOut) as minus
+						from trans
+						where trans.user_id = ?
+						group by coinOut_id
+					) cOut on cOut.coinOut_id =id
+				left join 
+						(
+						select
+							coinIn_id,
+							sum(amountIn) as plus
+						from trans
+						where trans.user_id = ?
+						group by coinIn_id
+					) cIn on cIn.coinIn_id =id`
 
 		var res = connection.query(q,[userId, userId], function(err,results){
 			if(err){
                 console.log("failed finding users");
             }
 
-            var bal = {};
-            results.forEach(function(t){
-            	//check if coin already added, if not set to 0
-            	!(t.short_name in bal) && (bal[t.short_name] = 0)
-
-            	//add balances to the coin
-            	bal[t.short_name] += t.flow=='in' ? t.amt : -t.amt
-			
-			});
-	        next(err,bal)
+	        next(err,results)
         });
 	};
 

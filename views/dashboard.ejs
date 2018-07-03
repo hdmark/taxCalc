@@ -10,9 +10,9 @@
 					<p>
 						<strong>id</strong>: <%= user.id %><br>
 						<strong>username</strong>: <%= user.username %><br>
-						<% for(var coin in results){  %>
-							<li><%= coin %> .......... <%= results[coin] %></li>
-						<% } %> 
+						<% results.forEach(function(coin){  %>
+							<li><%= coin.short_name %> .......... <%= coin.balance %></li>
+						<% }) %> 
 
 					</p>
 
