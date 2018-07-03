@@ -1,0 +1,47 @@
+<% include ./partials/header %>
+
+<div class="container row">
+	<h1 style="text-align: center">Add Trans</h1>
+	    <br>
+	    <div style="width: 30%; margin: 25px auto;">
+	        <form action="/detail" method="POST">
+            	<div class="form-group">
+					<select type="text" name="transType">
+						<% transTypeList && transTypeList.forEach(function(transType){ %>
+							<option><%= transType.type %></option>
+						<% }) %>
+					</select>
+				</div>
+				<div class="form-group">
+					<select type="select" name="coinIn">
+						<% coinsList && coinsList.forEach(function(coin){ %>
+							<option><%= coin.short_name %></option>
+						<% }) %>
+					</select>
+
+				</div>
+				<div class="form-group">
+					<input type="number" name="amountIn">
+				</div>
+				<div class="form-group">
+					<select type="select" name="coinOut">
+						<% coinsList && coinsList.forEach(function(coin){ %>
+							<option><%= coin.short_name %></option>
+						<% }) %>
+					</select>
+				</div>
+				<div class="form-group">
+					<input type="text" name="amountOut">
+				</div>
+
+				<div class="form-group">
+					<input type="submit" name="">
+				</div>
+
+	        </form>
+	        <a href="/detail">Go Back</a>
+	    </div>
+		
+</div>
+
+<% include ./partials/footer %>

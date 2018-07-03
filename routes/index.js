@@ -71,7 +71,7 @@ module.exports = function(app,passport,connection){
             if(err){
                 console.log(err);
             }
-            console.log(results)
+
             res.render('dashboard.ejs', {results:results})
         })
     });
@@ -81,6 +81,7 @@ module.exports = function(app,passport,connection){
 
         queries.detail(req.user.username, function(err,results){
             if(err){console.log(err)};
+            console.log(results)
             res.render('detail', {results:results})
         })
            
@@ -90,11 +91,11 @@ module.exports = function(app,passport,connection){
     app.post('/detail', isLoggedIn, function(req, res){
         var trans = {
             user_id: req.user.id,
-            coinIn_id: req.body.coinIn,
+            coinIn: req.body.coinIn,
+            coinOut: req.body.coinOut,
             amountIn: req.body.amountIn,
-            coinOut_id: req.body.coinOut,
             amountOut: req.body.amountOut,
-            transType_id: req.body.transType
+            transType: req.body.transType
         }
 
         queries.detailInsert(trans, function(err,results){
@@ -106,8 +107,48 @@ module.exports = function(app,passport,connection){
             
             res.redirect('detail')
         })        
+    });
+
+    //Delete a transaction
+    app.post('/detail_delete', isLoggedIn, function(req, res){
+        var transId = req.body.transId
+
+        queries.transDelete(transId, function(err,results){
+            if(err){
+                //console.log(err)
+                req.flash('error', 'Invalid Data')
+                res.render('detail')
+            };
+            res.redirect('detail')
+        })        
     })
 
+    app.get('/addTrans', isLoggedIn, function(req, res){
+        var coinsList = []
+        var transTypeList = []
+        queries.getCoinsList(function(err,results){
+            if(err){
+                req.flash('error', 'failed to get coins')
+                res.render('detail');
+            }
+            coinsList = results
+
+            queries.getTransTypeList(function(err, results){
+                if(err){
+                    req.flash('error', 'failed to get trains type')
+                    res.render('detail')
+                }
+                console.log(results)
+                transTypeList = results
+                res.render('addTrans', {coinsList:coinsList, transTypeList:transTypeList})
+            })
+        });
+
+        
+       // console.log(coinsList)
+       // console.log(transTypeList)
+        //res.render('addTrans', {coinsList:coinsList, transTypeList:transTypeList})
+    });
 
 
 
