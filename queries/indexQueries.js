@@ -64,7 +64,7 @@ module.exports = function(connection){
         });
 	};
 
-	//pulls out transactions for that user
+	//adds transactions for that user
 	module.detailInsert = function(trans,  next){
 		var q = `INSERT INTO trans
 				(user_id, coinIn_id, coinOut_id, amountIn, amountOut, transType_id)
